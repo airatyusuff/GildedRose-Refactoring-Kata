@@ -1,5 +1,9 @@
 package gildedrose
 
+import (
+	"strconv"
+)
+
 type Item struct {
 	Name            string
 	SellIn, Quality int
@@ -55,4 +59,18 @@ func UpdateQuality(items []*Item) {
 		}
 	}
 
+}
+
+func OutputDaysInventory(items []*Item) []string {
+	days := 2
+	output := make([]string, 0)
+
+	for day := 0; day < days; day++ {
+		for i := 0; i < len(items); i++ {
+			itemAsStr := items[i].Name + " " + strconv.Itoa(items[i].SellIn) + " " + strconv.Itoa(items[i].Quality)
+			output = append(output, itemAsStr)
+		}
+		UpdateQuality(items)
+	}
+	return output
 }
