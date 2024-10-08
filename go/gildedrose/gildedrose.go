@@ -1,12 +1,12 @@
 package gildedrose
 
-import (
-	"strconv"
-)
-
 type Item struct {
 	Name            string
 	SellIn, Quality int
+}
+
+func isSulfurItem(item *Item) bool {
+	return item.Name == "Sulfuras, Hand of Ragnaros"
 }
 
 func isRegularItem(itemName string) bool {
@@ -20,10 +20,26 @@ func isItemQualityValid(quality int) bool {
 }
 
 func updateBackstageItem(item *Item) {
-	if item.SellIn < 11 && isItemQualityValid(item.Quality) {
+	if item.SellIn < 0 {
+		item.Quality = 0
+		return
+	}
+	if isItemQualityValid(item.Quality) {
+		if item.SellIn < 6 {
+			item.Quality = item.Quality + 3
+			return
+		}
+		if item.SellIn < 11 {
+			item.Quality = item.Quality + 2
+			return
+		}
 		item.Quality = item.Quality + 1
 	}
-	if item.SellIn < 6 && isItemQualityValid(item.Quality) {
+
+}
+
+func updateAgedBrieItem(item *Item) {
+	if item.Quality < 50 {
 		item.Quality = item.Quality + 1
 	}
 }
@@ -45,49 +61,27 @@ func updateSellInDate(item *Item) {
 }
 
 func UpdateItemQuality(item *Item) {
+	if isSulfurItem(item) {
+		return
+	}
+
 	updateSellInDate(item)
 
 	if isRegularItem(item.Name) && isItemQualityValid(item.Quality) {
 		updateRegularItem(item)
-	} else {
-		if item.Quality < 50 {
-			item.Quality = item.Quality + 1
-
-			if item.Name == "Backstage passes to a TAFKAL80ETC concert" {
-				updateBackstageItem(item)
-			}
-		}
+		return
 	}
 
-	if item.SellIn < 0 {
-		if item.Name != "Aged Brie" {
-			if item.Name != "Backstage passes to a TAFKAL80ETC concert" {
-				if item.Quality > 0 {
-					if item.Name != "Sulfuras, Hand of Ragnaros" {
-						item.Quality = item.Quality - 1
-					}
-				}
-			} else {
-				item.Quality = 0
-			}
-		} else {
-			if item.Quality < 50 {
-				item.Quality = item.Quality + 1
-			}
+	if item.Quality < 50 {
+		if item.Name == "Backstage passes to a TAFKAL80ETC concert" {
+			updateBackstageItem(item)
+			return
 		}
-	}
-}
-
-func OutputInventory(items []*Item) []string {
-	days := 2
-	output := make([]string, 0)
-
-	for day := 0; day < days; day++ {
-		for _, item := range items {
-			itemAsStr := item.Name + " " + strconv.Itoa(item.SellIn) + " " + strconv.Itoa(item.Quality)
-			output = append(output, itemAsStr)
+		if item.Name == "Aged Brie" {
+			updateAgedBrieItem(item)
+			return
 		}
-		UpdateQuality(items)
+
+		item.Quality = item.Quality + 1
 	}
-	return output
 }
