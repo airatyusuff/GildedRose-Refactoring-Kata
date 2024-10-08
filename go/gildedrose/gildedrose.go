@@ -1,10 +1,5 @@
 package gildedrose
 
-type Item struct {
-	Name            string
-	SellIn, Quality int
-}
-
 func isSulfurItem(item *Item) bool {
 	return item.Name == "Sulfuras, Hand of Ragnaros"
 }
