@@ -28,15 +28,16 @@ func (bs BackstageItem) UpdateItem(item *Item) {
 		item.Quality = 0
 		return
 	}
-	if isItemQualityValid(item.Quality) {
-		if item.SellIn < 6 {
-			item.Quality = item.Quality + 3
-			return
-		}
-		if item.SellIn < 11 {
-			item.Quality = item.Quality + 2
-			return
-		}
-		item.Quality = item.Quality + 1
+
+	if isItemQualityValid(item.Quality) && isItemInRangeForTripleIncrease(item.SellIn) {
+		item.Quality = item.Quality + 3
+		return
 	}
+
+	if isItemQualityValid(item.Quality) && isItemForDoubleIncrease(item.SellIn) {
+		item.Quality = item.Quality + 2
+		return
+	}
+
+	item.Quality = item.Quality + 1
 }

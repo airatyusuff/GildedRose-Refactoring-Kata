@@ -2,6 +2,20 @@ package gildedrose
 
 import "strings"
 
+const MAX_SELLIN_FOR_DOUBLE_BACKSTAGE = 10
+const MAX_SELLIN_FOR_TRIPLE_BACKSTAGE = 5
+const MAX_ITEM_QUALITY = 50
+const MIN_ITEM_QUALITY = 0
+
+func isItemInRangeForTripleIncrease(sellIn int) bool {
+	return sellIn < MAX_SELLIN_FOR_TRIPLE_BACKSTAGE
+}
+
+func isItemForDoubleIncrease(sellIn int) bool {
+	return (sellIn > 0 &&
+		sellIn < MAX_SELLIN_FOR_DOUBLE_BACKSTAGE)
+}
+
 func isSulfurItem(item *Item) bool {
 	return item.Name == "Sulfuras, Hand of Ragnaros"
 }
@@ -16,25 +30,30 @@ func isRegularItem(itemName string) bool {
 }
 
 func isItemQualityValid(quality int) bool {
-	return quality > 0 && quality < 50
+	return quality > MIN_ITEM_QUALITY && quality < MAX_ITEM_QUALITY
+}
+
+func isItemMaxQuality(quality int) bool {
+	return quality == MAX_ITEM_QUALITY
 }
 
 func updateBackstageItem(item *Item) {
-	if item.SellIn < 0 {
-		item.Quality = 0
+	if item.SellIn < MIN_ITEM_QUALITY {
+		item.Quality = MIN_ITEM_QUALITY
 		return
 	}
-	if isItemQualityValid(item.Quality) {
-		if item.SellIn < 6 {
-			item.Quality = item.Quality + 3
-			return
-		}
-		if item.SellIn < 11 {
-			item.Quality = item.Quality + 2
-			return
-		}
-		item.Quality = item.Quality + 1
+
+	if isItemQualityValid(item.Quality) && isItemInRangeForTripleIncrease(item.SellIn) {
+		item.Quality = item.Quality + 3
+		return
 	}
+
+	if isItemQualityValid(item.Quality) && isItemForDoubleIncrease(item.SellIn) {
+		item.Quality = item.Quality + 2
+		return
+	}
+
+	item.Quality = item.Quality + 1
 }
 
 func updateConjuredItem(item *Item) {
@@ -44,7 +63,7 @@ func updateConjuredItem(item *Item) {
 }
 
 func updateAgedBrieItem(item *Item) {
-	if item.Quality < 50 {
+	if item.Quality < MAX_ITEM_QUALITY {
 		item.Quality = item.Quality + 1
 	}
 }
@@ -71,7 +90,7 @@ func UpdateItemQuality(item *Item) {
 		return
 	}
 
-	if item.Quality < 50 {
+	if item.Quality < MAX_ITEM_QUALITY {
 		itemNameLower := strings.ToLower(item.Name)
 
 		if strings.Contains(itemNameLower, "conjured") {
