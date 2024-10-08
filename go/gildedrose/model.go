@@ -6,10 +6,18 @@ type ConjuredItem struct{}
 type SulfurasItem struct{}
 type RegularItem struct{}
 
-func (s SulfurasItem) UpdateItem(item *Item) {}
+func (s SulfurasItem) UpdateItem(item *Item) {
+	item.Quality = SULFURAS_ITEM_QUALITY
+}
 
 func (r RegularItem) UpdateItem(item *Item) {
 	UpdateSellInDate(item)
+
+	if isItemPastSellIn(item.SellIn) {
+		item.Quality = item.Quality - 2
+		return
+	}
+
 	if item.Quality > MIN_ITEM_QUALITY {
 		item.Quality = item.Quality - 1
 	}
@@ -54,6 +62,10 @@ func (bs BackstageItem) UpdateItem(item *Item) {
 
 func UpdateSellInDate(item *Item) {
 	item.SellIn = item.SellIn - 1
+}
+
+func isItemPastSellIn(sellIn int) bool {
+	return sellIn < 0
 }
 
 func isItemQualityValid(quality int) bool {
