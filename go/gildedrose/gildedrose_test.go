@@ -53,15 +53,33 @@ func TestInventoryUpdate(t *testing.T) {
 	}
 }
 
-func Test_Foo(t *testing.T) {
+func TestItemsWithZeroQuality(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"foo", 0, 0},
+		{"regular item", 5, 0},
+		{"Sulfuras item", 5, 0},
+		{"backstage passes item", 5, 0},
+		{"Aged Brie item", 5, 0},
+		{"Conjured item", 5, 0},
+	}
+
+	var expected = []*gildedrose.Item{
+		{"regular item", 4, 0},
+		{"Sulfuras item", 5, 0},
+		{"backstage passes item", 4, 3},
+		{"Aged Brie item", 4, 1},
+		{"Conjured item", 4, 0},
 	}
 
 	gildedrose.UpdateInventory(items)
 
-	if items[0].Name != "foo" {
-		t.Errorf("Name: Expected %s but got %s ", "foo", items[0].Name)
+	for i, tc := range expected {
+
+		if strconv.Itoa(tc.Quality) != strconv.Itoa(items[i].Quality) {
+			t.Errorf("Expected %q %q but got %q", items[i].Name, strconv.Itoa(tc.Quality), strconv.Itoa(items[i].Quality))
+		}
+		if strconv.Itoa(tc.SellIn) != strconv.Itoa(items[i].SellIn) {
+			t.Errorf("Expected %q but got %q", strconv.Itoa(tc.SellIn), strconv.Itoa(items[i].SellIn))
+		}
 	}
 }
 

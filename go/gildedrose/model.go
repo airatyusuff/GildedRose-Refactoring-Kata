@@ -15,17 +15,17 @@ func (r RegularItem) UpdateItem(item *Item) {
 	}
 }
 
+func (c ConjuredItem) UpdateItem(item *Item) {
+	UpdateSellInDate(item)
+	if item.Quality >= MIN_ITEM_CONJURED_QUALITY {
+		item.Quality = item.Quality - 2
+	}
+}
+
 func (ab AgedBrieItem) UpdateItem(item *Item) {
 	UpdateSellInDate(item)
 	if item.Quality < MAX_ITEM_QUALITY {
 		item.Quality = item.Quality + 1
-	}
-}
-
-func (c ConjuredItem) UpdateItem(item *Item) {
-	UpdateSellInDate(item)
-	if isItemQualityValid(item.Quality) {
-		item.Quality = item.Quality - 2
 	}
 }
 
@@ -57,7 +57,7 @@ func UpdateSellInDate(item *Item) {
 }
 
 func isItemQualityValid(quality int) bool {
-	return quality > MIN_ITEM_QUALITY && quality < MAX_ITEM_QUALITY
+	return quality >= MIN_ITEM_QUALITY && quality < MAX_ITEM_QUALITY
 }
 
 func isBackstageItemForTripleIncrease(sellIn int) bool {
