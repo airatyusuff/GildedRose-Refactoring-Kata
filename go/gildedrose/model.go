@@ -6,9 +6,7 @@ type ConjuredItem struct{}
 type SulfurasItem struct{}
 type RegularItem struct{}
 
-func (s SulfurasItem) UpdateItem(item *Item) {
-	item.Quality = SULFURAS_ITEM_QUALITY
-}
+func (s SulfurasItem) UpdateItem(item *Item) {}
 
 func (r RegularItem) UpdateItem(item *Item) {
 	UpdateSellInDate(item)
