@@ -1,13 +1,18 @@
 package gildedrose
 
+import "strings"
+
 func isSulfurItem(item *Item) bool {
 	return item.Name == "Sulfuras, Hand of Ragnaros"
 }
 
 func isRegularItem(itemName string) bool {
+	itemNameLower := strings.ToLower(itemName)
+
 	return (itemName != "Aged Brie" &&
-		itemName != "Backstage passes to a TAFKAL80ETC concert" &&
-		itemName != "Sulfuras, Hand of Ragnaros")
+		itemName != "Sulfuras, Hand of Ragnaros" &&
+		!strings.Contains(itemNameLower, "conjured") &&
+		!strings.Contains(itemNameLower, "backstage passes"))
 }
 
 func isItemQualityValid(quality int) bool {
@@ -30,7 +35,12 @@ func updateBackstageItem(item *Item) {
 		}
 		item.Quality = item.Quality + 1
 	}
+}
 
+func updateConjuredItem(item *Item) {
+	if isItemQualityValid(item.Quality) {
+		item.Quality = item.Quality - 2
+	}
 }
 
 func updateAgedBrieItem(item *Item) {
@@ -41,12 +51,6 @@ func updateAgedBrieItem(item *Item) {
 
 func updateRegularItem(item *Item) {
 	item.Quality = item.Quality - 1
-}
-
-func UpdateQuality(items []*Item) {
-	for _, item := range items {
-		UpdateItemQuality(item)
-	}
 }
 
 func updateSellInDate(item *Item) {
@@ -68,6 +72,13 @@ func UpdateItemQuality(item *Item) {
 	}
 
 	if item.Quality < 50 {
+		itemNameLower := strings.ToLower(item.Name)
+
+		if strings.Contains(itemNameLower, "conjured") {
+			updateConjuredItem(item)
+			return
+		}
+
 		if item.Name == "Backstage passes to a TAFKAL80ETC concert" {
 			updateBackstageItem(item)
 			return
@@ -78,5 +89,11 @@ func UpdateItemQuality(item *Item) {
 		}
 
 		item.Quality = item.Quality + 1
+	}
+}
+
+func UpdateQuality(items []*Item) {
+	for _, item := range items {
+		UpdateItemQuality(item)
 	}
 }
