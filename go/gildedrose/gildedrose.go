@@ -1,19 +1,11 @@
 package gildedrose
 
-import (
-	"strings"
-)
-
 const MAX_SELLIN_FOR_DOUBLE_PRICE_BACKSTAGE = 10
 const MAX_SELLIN_FOR_TRIPLE_PRICE_BACKSTAGE = 5
 const MAX_ITEM_QUALITY = 50
 const SULFURAS_ITEM_QUALITY = 80
 const MIN_ITEM_QUALITY = 0
 const MIN_ITEM_CONJURED_QUALITY = 2
-const TYPE_CONJURED = "conjured"
-const TYPE_AGED_BRIE = "aged brie"
-const TYPE_SULFURAS = "sulfuras"
-const TYPE_BACKSTAGE = "backstage passes"
 
 type Item struct {
 	Name            string
@@ -35,29 +27,18 @@ func UpdateInventory(items []*Item) {
 }
 
 func categoriseInventoryItemByName(itemName string, inventoryItems map[string]InventoryItem) {
-	itemNameLower := strings.ToLower(itemName)
-
-	if strings.Contains(itemNameLower, TYPE_AGED_BRIE) {
-		inventoryItems[itemName] = AgedBrieItem{}
-		return
-	}
-
-	if strings.Contains(itemNameLower, TYPE_BACKSTAGE) {
+	switch itemName {
+	case "Backstage passes to a TAFKAL80ETC concert":
 		inventoryItems[itemName] = BackstageItem{}
-		return
-	}
-
-	if strings.Contains(itemNameLower, TYPE_CONJURED) {
-		inventoryItems[itemName] = ConjuredItem{}
-		return
-	}
-
-	if strings.Contains(itemNameLower, TYPE_SULFURAS) {
+	case "Aged Brie":
+		inventoryItems[itemName] = AgedBrieItem{}
+	case "Sulfuras, Hand of Ragnaros":
 		inventoryItems[itemName] = SulfurasItem{}
-		return
+	case "Conjured Mana Cake":
+		inventoryItems[itemName] = ConjuredItem{}
+	default:
+		inventoryItems[itemName] = RegularItem{}
 	}
-
-	inventoryItems[itemName] = RegularItem{}
 }
 
 func updateInventoryItems(items []*Item, categorisedItems map[string]InventoryItem) {

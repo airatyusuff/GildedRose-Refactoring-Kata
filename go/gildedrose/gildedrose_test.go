@@ -9,13 +9,13 @@ import (
 
 func TestItemsQualityShouldNotFallBelowZero(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"regular item", 5, 0},
-		{"Conjured item", 5, 0},
+		{"Elixir of the Mongoose", 5, 0},
+		{"Conjured Mana Cake", 5, 0},
 	}
 
 	var expected = []*gildedrose.Item{
-		{"regular item", 4, 0},
-		{"Conjured item", 4, 0},
+		{"Elixir of the Mongoose", 4, 0},
+		{"Conjured Mana Cake", 4, 0},
 	}
 
 	gildedrose.UpdateInventory(items)
@@ -27,19 +27,19 @@ func TestItemsQualityShouldNotFallBelowZero(t *testing.T) {
 
 func TestItemsQualityShouldNotExceedMax(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"regular item", 5, 50},
-		{"backstage passes item", 5, 50},
-		{"backstage passes item 2", 9, 48},
-		{"Aged Brie item", 5, 50},
-		{"Conjured item", 5, 50},
+		{"Aged Brie", 5, 50},
+		{"Elixir of the Mongoose", 5, 50},
+		{"Backstage passes to a TAFKAL80ETC concert", 5, 50},
+		{"Backstage passes to a TAFKAL80ETC concert", 9, 48},
+		{"Conjured Mana Cake", 5, 50},
 	}
 
 	var expected = []*gildedrose.Item{
-		{"regular item", 4, 49},
-		{"backstage passes item", 4, 50},
-		{"backstage passes item 2", 8, 50},
-		{"Aged Brie item", 4, 50},
-		{"Conjured item", 4, 48},
+		{"Aged Brie", 4, 50},
+		{"Elixir of the Mongoose", 4, 49},
+		{"Backstage passes to a TAFKAL80ETC concert", 4, 50},
+		{"Backstage passes to a TAFKAL80ETC concert", 8, 50},
+		{"Conjured Mana Cake", 4, 48},
 	}
 
 	gildedrose.UpdateInventory(items)
@@ -51,11 +51,11 @@ func TestItemsQualityShouldNotExceedMax(t *testing.T) {
 
 func TestSulfurasItemIsConstant(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"Sulfuras item", 5, 20},
+		{"Sulfuras, Hand of Ragnaros", 5, 20},
 	}
 
 	var expected = []*gildedrose.Item{
-		{"Sulfuras item", 5, 80},
+		{"Sulfuras, Hand of Ragnaros", 5, 80},
 	}
 
 	gildedrose.UpdateInventory(items)
@@ -67,17 +67,17 @@ func TestSulfurasItemIsConstant(t *testing.T) {
 
 func TestBackstageItemsUpdatesAsExpected(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"backstage passes item", 15, 22},
-		{"backstage passes item 2", 9, 22},
-		{"backstage passes item 3", 3, 22},
-		{"backstage passes item 4", 0, 22},
+		{"Backstage passes to a TAFKAL80ETC concert", 15, 22},
+		{"Backstage passes to a TAFKAL80ETC concert", 9, 22},
+		{"Backstage passes to a TAFKAL80ETC concert", 3, 22},
+		{"Backstage passes to a TAFKAL80ETC concert", 0, 22},
 	}
 
 	var expected = []*gildedrose.Item{
-		{"backstage passes item", 14, 23},
-		{"backstage passes item 2", 8, 24},
-		{"backstage passes item 3", 2, 25},
-		{"backstage passes item 4", -1, 0},
+		{"Backstage passes to a TAFKAL80ETC concert", 14, 23},
+		{"Backstage passes to a TAFKAL80ETC concert", 8, 24},
+		{"Backstage passes to a TAFKAL80ETC concert", 2, 25},
+		{"Backstage passes to a TAFKAL80ETC concert", -1, 0},
 	}
 
 	gildedrose.UpdateInventory(items)
@@ -89,15 +89,15 @@ func TestBackstageItemsUpdatesAsExpected(t *testing.T) {
 
 func TestAgedBrieItemsUpdatesAsExpected(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"aged brie item", 5, 22},
-		{"aged brie item", 0, 50},
-		{"aged brie item", -3, 0},
+		{"Aged Brie", 5, 22},
+		{"Aged Brie", 0, 50},
+		{"Aged Brie", -3, 0},
 	}
 
 	var expected = []*gildedrose.Item{
-		{"aged brie item", 4, 23},
-		{"aged brie item", -1, 50},
-		{"aged brie item", -4, 1},
+		{"Aged Brie", 4, 23},
+		{"Aged Brie", -1, 50},
+		{"Aged Brie", -4, 1},
 	}
 
 	gildedrose.UpdateInventory(items)
@@ -109,13 +109,13 @@ func TestAgedBrieItemsUpdatesAsExpected(t *testing.T) {
 
 func TestRegularItemsDecreaseDoublePastSellIn(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"regular item", 0, 22},
-		{"regular item 2", -2, 10},
+		{"Elixir of the Mongoose", 0, 22},
+		{"+5 Dexterity Vest", -2, 10},
 	}
 
 	var expected = []*gildedrose.Item{
-		{"regular item", -1, 20},
-		{"regular item 2", -3, 8},
+		{"Elixir of the Mongoose", -1, 20},
+		{"+5 Dexterity Vest", -3, 8},
 	}
 
 	gildedrose.UpdateInventory(items)
@@ -127,15 +127,15 @@ func TestRegularItemsDecreaseDoublePastSellIn(t *testing.T) {
 
 func TestConjuredItemsDecreaseDouble(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"conjured item", -2, 50},
-		{"conjured item 2", 0, 0},
-		{"conjured item 3", 5, 23},
+		{"Conjured Mana Cake", -2, 50},
+		{"Conjured Mana Cake", 0, 0},
+		{"Conjured Mana Cake", 5, 23},
 	}
 
 	var expected = []*gildedrose.Item{
-		{"conjured item", -3, 48},
-		{"conjured item 2", -1, 0},
-		{"conjured item 3", 4, 21},
+		{"Conjured Mana Cake", -3, 48},
+		{"Conjured Mana Cake", -1, 0},
+		{"Conjured Mana Cake", 4, 21},
 	}
 
 	gildedrose.UpdateInventory(items)
@@ -156,7 +156,6 @@ func checkForEquality(t *testing.T, tc *gildedrose.Item, item *gildedrose.Item) 
 
 func TestCharacterisedTestAutomated(t *testing.T) {
 	items := []*gildedrose.Item{
-		{"Conjured sample item", 0, 13},
 		{"+5 Dexterity Vest", 10, 20},
 		{"Aged Brie", 2, 0},
 		{"Elixir of the Mongoose", 5, 0},
@@ -171,7 +170,6 @@ func TestCharacterisedTestAutomated(t *testing.T) {
 	output := characterisedTestAutomated(items)
 
 	expected := []string{
-		"Conjured sample item 0 13",
 		"+5 Dexterity Vest 10 20",
 		"Aged Brie 2 0",
 		"Elixir of the Mongoose 5 0",
@@ -181,7 +179,6 @@ func TestCharacterisedTestAutomated(t *testing.T) {
 		"Backstage passes to a TAFKAL80ETC concert 10 50",
 		"Backstage passes to a TAFKAL80ETC concert 0 20",
 		"Conjured Mana Cake 3 6",
-		"Conjured sample item -1 11",
 		"+5 Dexterity Vest 9 19",
 		"Aged Brie 1 1",
 		"Elixir of the Mongoose 4 0",
