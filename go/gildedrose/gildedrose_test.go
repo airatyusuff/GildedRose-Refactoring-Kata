@@ -51,7 +51,7 @@ func TestItemsQualityShouldNotExceedMax(t *testing.T) {
 
 func TestSulfurasItemIsConstant(t *testing.T) {
 	var items = []*gildedrose.Item{
-		{"Sulfuras, Hand of Ragnaros", 5, 20},
+		{"Sulfuras, Hand of Ragnaros", 5, 80},
 	}
 
 	var expected = []*gildedrose.Item{
