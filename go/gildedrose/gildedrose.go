@@ -13,14 +13,23 @@ const TYPE_AGED_BRIE = "aged brie"
 const TYPE_SULFURAS = "sulfuras"
 const TYPE_BACKSTAGE = "backstage passes"
 
-func UpdateQuality(items []*Item) {
-	categorisedInventoryItems := map[string]InventoryItem{}
+type Item struct {
+	Name            string
+	SellIn, Quality int
+}
+
+type InventoryItem interface {
+	UpdateItem(item *Item)
+}
+
+func UpdateInventory(items []*Item) {
+	inventoryItems := map[string]InventoryItem{}
 
 	for _, item := range items {
-		categoriseInventoryItemByName(item.Name, categorisedInventoryItems)
+		categoriseInventoryItemByName(item.Name, inventoryItems)
 	}
 
-	updateInventoryItems(items, categorisedInventoryItems)
+	updateInventoryItems(items, inventoryItems)
 }
 
 func categoriseInventoryItemByName(itemName string, inventoryItems map[string]InventoryItem) {

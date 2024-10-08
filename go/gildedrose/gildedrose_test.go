@@ -58,7 +58,7 @@ func Test_Foo(t *testing.T) {
 		{"foo", 0, 0},
 	}
 
-	gildedrose.UpdateQuality(items)
+	gildedrose.UpdateInventory(items)
 
 	if items[0].Name != "foo" {
 		t.Errorf("Name: Expected %s but got %s ", "foo", items[0].Name)
@@ -74,7 +74,7 @@ func OutputInventory(items []*gildedrose.Item) []string {
 			itemAsStr := item.Name + " " + strconv.Itoa(item.SellIn) + " " + strconv.Itoa(item.Quality)
 			output = append(output, itemAsStr)
 		}
-		gildedrose.UpdateQuality(items)
+		gildedrose.UpdateInventory(items)
 	}
 	return output
 }

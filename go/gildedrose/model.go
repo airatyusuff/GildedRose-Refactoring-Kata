@@ -1,19 +1,10 @@
 package gildedrose
 
-type Item struct {
-	Name            string
-	SellIn, Quality int
-}
-
 type BackstageItem struct{}
 type AgedBrieItem struct{}
 type ConjuredItem struct{}
 type SulfurasItem struct{}
 type RegularItem struct{}
-
-type InventoryItem interface {
-	UpdateItem(item *Item)
-}
 
 func (s SulfurasItem) UpdateItem(item *Item) {}
 
