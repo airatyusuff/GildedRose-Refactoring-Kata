@@ -5,26 +5,28 @@ type Item struct {
 	SellIn, Quality int
 }
 
-type InventoryItem interface {
-	UpdateItem(item *Item)
-}
-
 type BackstageItem struct{}
 type AgedBrieItem struct{}
 type ConjuredItem struct{}
 type SulfurasItem struct{}
 type RegularItem struct{}
 
+type InventoryItem interface {
+	UpdateItem(item *Item)
+}
+
 func (s SulfurasItem) UpdateItem(item *Item) {}
 
 func (r RegularItem) UpdateItem(item *Item) {
 	UpdateSellInDate(item)
-	item.Quality = item.Quality - 1
+	if item.Quality > MIN_ITEM_QUALITY {
+		item.Quality = item.Quality - 1
+	}
 }
 
 func (ab AgedBrieItem) UpdateItem(item *Item) {
 	UpdateSellInDate(item)
-	if item.Quality < 50 {
+	if item.Quality < MAX_ITEM_QUALITY {
 		item.Quality = item.Quality + 1
 	}
 }
@@ -57,6 +59,14 @@ func (bs BackstageItem) UpdateItem(item *Item) {
 		item.Quality = item.Quality + 1
 		return
 	}
+}
+
+func UpdateSellInDate(item *Item) {
+	item.SellIn = item.SellIn - 1
+}
+
+func isItemQualityValid(quality int) bool {
+	return quality > MIN_ITEM_QUALITY && quality < MAX_ITEM_QUALITY
 }
 
 func isBackstageItemForTripleIncrease(sellIn int) bool {

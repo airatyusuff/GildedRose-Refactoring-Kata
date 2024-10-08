@@ -13,33 +13,17 @@ const TYPE_AGED_BRIE = "aged brie"
 const TYPE_SULFURAS = "sulfuras"
 const TYPE_BACKSTAGE = "backstage passes"
 
-func isItemQualityValid(quality int) bool {
-	return quality > MIN_ITEM_QUALITY && quality < MAX_ITEM_QUALITY
-}
-
-func UpdateSellInDate(item *Item) {
-	if item.Name != "Sulfuras, Hand of Ragnaros" {
-		item.SellIn = item.SellIn - 1
-	}
-}
-
 func UpdateQuality(items []*Item) {
 	categorisedInventoryItems := map[string]InventoryItem{}
 
 	for _, item := range items {
-		categoriseInventoryItem(item.Name, categorisedInventoryItems)
+		categoriseInventoryItemByName(item.Name, categorisedInventoryItems)
 	}
-	UpdateInventoryItems(items, categorisedInventoryItems)
+
+	updateInventoryItems(items, categorisedInventoryItems)
 }
 
-func UpdateInventoryItems(items []*Item, categorisedItems map[string]InventoryItem) {
-	for _, item := range items {
-		categorisedItem := categorisedItems[item.Name]
-		categorisedItem.UpdateItem(item)
-	}
-}
-
-func categoriseInventoryItem(itemName string, inventoryItems map[string]InventoryItem) {
+func categoriseInventoryItemByName(itemName string, inventoryItems map[string]InventoryItem) {
 	itemNameLower := strings.ToLower(itemName)
 
 	if strings.Contains(itemNameLower, TYPE_AGED_BRIE) {
@@ -63,4 +47,11 @@ func categoriseInventoryItem(itemName string, inventoryItems map[string]Inventor
 	}
 
 	inventoryItems[itemName] = RegularItem{}
+}
+
+func updateInventoryItems(items []*Item, categorisedItems map[string]InventoryItem) {
+	for _, item := range items {
+		categorisedItem := categorisedItems[item.Name]
+		categorisedItem.UpdateItem(item)
+	}
 }
