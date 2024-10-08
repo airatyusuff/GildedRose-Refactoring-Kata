@@ -7,7 +7,7 @@ import (
 	"github.com/emilybache/gildedrose-refactoring-kata/gildedrose"
 )
 
-func TestItemsQualityShouldNotFallBelowZero(t *testing.T) {
+func Test_ItemsQualityShouldNotFallBelowZero(t *testing.T) {
 	var items = []*gildedrose.Item{
 		{"Elixir of the Mongoose", 5, 0},
 		{"Conjured Mana Cake", 5, 0},
@@ -25,7 +25,7 @@ func TestItemsQualityShouldNotFallBelowZero(t *testing.T) {
 	}
 }
 
-func TestItemsQualityShouldNotExceedMax(t *testing.T) {
+func Test_ItemsQualityShouldNotExceedMax(t *testing.T) {
 	var items = []*gildedrose.Item{
 		{"Aged Brie", 5, 50},
 		{"Elixir of the Mongoose", 5, 50},
@@ -49,7 +49,7 @@ func TestItemsQualityShouldNotExceedMax(t *testing.T) {
 	}
 }
 
-func TestSulfurasItemIsConstant(t *testing.T) {
+func Test_SulfurasItemQualityIsConstant(t *testing.T) {
 	var items = []*gildedrose.Item{
 		{"Sulfuras, Hand of Ragnaros", 5, 80},
 	}
@@ -65,7 +65,7 @@ func TestSulfurasItemIsConstant(t *testing.T) {
 	}
 }
 
-func TestBackstageItemsUpdatesAsExpected(t *testing.T) {
+func Test_BackstageItemsUpdatesAsExpected(t *testing.T) {
 	var items = []*gildedrose.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 15, 22},
 		{"Backstage passes to a TAFKAL80ETC concert", 9, 22},
@@ -87,7 +87,7 @@ func TestBackstageItemsUpdatesAsExpected(t *testing.T) {
 	}
 }
 
-func TestAgedBrieItemsUpdatesAsExpected(t *testing.T) {
+func Test_AgedBrieItemsUpdatesAsExpected(t *testing.T) {
 	var items = []*gildedrose.Item{
 		{"Aged Brie", 5, 22},
 		{"Aged Brie", 0, 50},
@@ -107,7 +107,7 @@ func TestAgedBrieItemsUpdatesAsExpected(t *testing.T) {
 	}
 }
 
-func TestRegularItemsDecreaseDoublePastSellIn(t *testing.T) {
+func Test_RegularItemsDecreaseDoublePastSellIn(t *testing.T) {
 	var items = []*gildedrose.Item{
 		{"Elixir of the Mongoose", 0, 22},
 		{"+5 Dexterity Vest", -2, 10},
@@ -125,7 +125,7 @@ func TestRegularItemsDecreaseDoublePastSellIn(t *testing.T) {
 	}
 }
 
-func TestConjuredItemsDecreaseDouble(t *testing.T) {
+func Test_ConjuredItemsDecreaseDouble(t *testing.T) {
 	var items = []*gildedrose.Item{
 		{"Conjured Mana Cake", -2, 50},
 		{"Conjured Mana Cake", 0, 0},
