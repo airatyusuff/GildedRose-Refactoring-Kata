@@ -9,65 +9,82 @@ type Item struct {
 	SellIn, Quality int
 }
 
+func isRegularItem(itemName string) bool {
+	return (itemName != "Aged Brie" &&
+		itemName != "Backstage passes to a TAFKAL80ETC concert" &&
+		itemName != "Sulfuras, Hand of Ragnaros")
+}
+
+func isItemQualityValid(quality int) bool {
+	return quality > 0 && quality < 50
+}
+
+func updateBackstageItem(item *Item) {
+	if item.SellIn < 11 && isItemQualityValid(item.Quality) {
+		item.Quality = item.Quality + 1
+	}
+	if item.SellIn < 6 && isItemQualityValid(item.Quality) {
+		item.Quality = item.Quality + 1
+	}
+}
+
+func updateRegularItem(item *Item) {
+	item.Quality = item.Quality - 1
+}
+
 func UpdateQuality(items []*Item) {
-	for i := 0; i < len(items); i++ {
+	for _, item := range items {
+		UpdateItemQuality(item)
+	}
+}
 
-		if items[i].Name != "Aged Brie" && items[i].Name != "Backstage passes to a TAFKAL80ETC concert" {
-			if items[i].Quality > 0 {
-				if items[i].Name != "Sulfuras, Hand of Ragnaros" {
-					items[i].Quality = items[i].Quality - 1
-				}
-			}
-		} else {
-			if items[i].Quality < 50 {
-				items[i].Quality = items[i].Quality + 1
-				if items[i].Name == "Backstage passes to a TAFKAL80ETC concert" {
-					if items[i].SellIn < 11 {
-						if items[i].Quality < 50 {
-							items[i].Quality = items[i].Quality + 1
-						}
-					}
-					if items[i].SellIn < 6 {
-						if items[i].Quality < 50 {
-							items[i].Quality = items[i].Quality + 1
-						}
-					}
-				}
-			}
-		}
+func updateSellInDate(item *Item) {
+	if item.Name != "Sulfuras, Hand of Ragnaros" {
+		item.SellIn = item.SellIn - 1
+	}
+}
 
-		if items[i].Name != "Sulfuras, Hand of Ragnaros" {
-			items[i].SellIn = items[i].SellIn - 1
-		}
+func UpdateItemQuality(item *Item) {
+	updateSellInDate(item)
 
-		if items[i].SellIn < 0 {
-			if items[i].Name != "Aged Brie" {
-				if items[i].Name != "Backstage passes to a TAFKAL80ETC concert" {
-					if items[i].Quality > 0 {
-						if items[i].Name != "Sulfuras, Hand of Ragnaros" {
-							items[i].Quality = items[i].Quality - 1
-						}
-					}
-				} else {
-					items[i].Quality = items[i].Quality - items[i].Quality
-				}
-			} else {
-				if items[i].Quality < 50 {
-					items[i].Quality = items[i].Quality + 1
-				}
+	if isRegularItem(item.Name) && isItemQualityValid(item.Quality) {
+		updateRegularItem(item)
+	} else {
+		if item.Quality < 50 {
+			item.Quality = item.Quality + 1
+
+			if item.Name == "Backstage passes to a TAFKAL80ETC concert" {
+				updateBackstageItem(item)
 			}
 		}
 	}
 
+	if item.SellIn < 0 {
+		if item.Name != "Aged Brie" {
+			if item.Name != "Backstage passes to a TAFKAL80ETC concert" {
+				if item.Quality > 0 {
+					if item.Name != "Sulfuras, Hand of Ragnaros" {
+						item.Quality = item.Quality - 1
+					}
+				}
+			} else {
+				item.Quality = 0
+			}
+		} else {
+			if item.Quality < 50 {
+				item.Quality = item.Quality + 1
+			}
+		}
+	}
 }
 
-func OutputDaysInventory(items []*Item) []string {
+func OutputInventory(items []*Item) []string {
 	days := 2
 	output := make([]string, 0)
 
 	for day := 0; day < days; day++ {
-		for i := 0; i < len(items); i++ {
-			itemAsStr := items[i].Name + " " + strconv.Itoa(items[i].SellIn) + " " + strconv.Itoa(items[i].Quality)
+		for _, item := range items {
+			itemAsStr := item.Name + " " + strconv.Itoa(item.SellIn) + " " + strconv.Itoa(item.Quality)
 			output = append(output, itemAsStr)
 		}
 		UpdateQuality(items)
