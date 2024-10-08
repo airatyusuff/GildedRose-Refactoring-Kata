@@ -20,13 +20,13 @@ func UpdateInventory(items []*Item) {
 	inventoryItems := map[string]InventoryItem{}
 
 	for _, item := range items {
-		categoriseInventoryItemByName(item.Name, inventoryItems)
+		addItemToInventoryByName(item.Name, inventoryItems)
 	}
 
 	updateInventoryItems(items, inventoryItems)
 }
 
-func categoriseInventoryItemByName(itemName string, inventoryItems map[string]InventoryItem) {
+func addItemToInventoryByName(itemName string, inventoryItems map[string]InventoryItem) {
 	switch itemName {
 	case "Backstage passes to a TAFKAL80ETC concert":
 		inventoryItems[itemName] = BackstageItem{}
