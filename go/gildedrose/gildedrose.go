@@ -13,37 +13,42 @@ type Item struct {
 }
 
 type InventoryItem interface {
-	UpdateItem(item *Item)
+	UpdateItem()
 }
 
 func UpdateInventory(items []*Item) {
 	inventoryItems := map[string]InventoryItem{}
 
 	for _, item := range items {
-		addItemToInventoryByName(item.Name, inventoryItems)
+		addItemToInventoryByName(item, inventoryItems)
 	}
 
 	updateInventoryItems(items, inventoryItems)
 }
 
-func addItemToInventoryByName(itemName string, inventoryItems map[string]InventoryItem) {
-	switch itemName {
+func addItemToInventoryByName(item *Item, inventoryItems map[string]InventoryItem) {
+	switch item.Name {
 	case "Backstage passes to a TAFKAL80ETC concert":
-		inventoryItems[itemName] = BackstageItem{}
+		sa := &BackstageItem{item: item}
+		inventoryItems[item.Name] = sa
 	case "Aged Brie":
-		inventoryItems[itemName] = AgedBrieItem{}
+		sa := &AgedBrieItem{item: item}
+		inventoryItems[item.Name] = sa
 	case "Sulfuras, Hand of Ragnaros":
-		inventoryItems[itemName] = SulfurasItem{}
+		sa := &SulfurasItem{item: item}
+		inventoryItems[item.Name] = sa
 	case "Conjured Mana Cake":
-		inventoryItems[itemName] = ConjuredItem{}
+		sa := &ConjuredItem{item: item}
+		inventoryItems[item.Name] = sa
 	default:
-		inventoryItems[itemName] = RegularItem{}
+		sa := &RegularItem{item: item}
+		inventoryItems[item.Name] = sa
 	}
 }
 
 func updateInventoryItems(items []*Item, categorisedItems map[string]InventoryItem) {
 	for _, item := range items {
 		categorisedItem := categorisedItems[item.Name]
-		categorisedItem.UpdateItem(item)
+		categorisedItem.UpdateItem()
 	}
 }

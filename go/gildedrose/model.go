@@ -1,59 +1,69 @@
 package gildedrose
 
-type BackstageItem struct{}
-type AgedBrieItem struct{}
-type ConjuredItem struct{}
-type SulfurasItem struct{}
-type RegularItem struct{}
+type BackstageItem struct {
+	item *Item
+}
+type AgedBrieItem struct {
+	item *Item
+}
+type ConjuredItem struct {
+	item *Item
+}
+type SulfurasItem struct {
+	item *Item
+}
+type RegularItem struct {
+	item *Item
+}
 
-func (s SulfurasItem) UpdateItem(item *Item) {}
+func (s *SulfurasItem) UpdateItem() {}
 
-func (r RegularItem) UpdateItem(item *Item) {
-	UpdateSellInDate(item)
+func (r *RegularItem) UpdateItem() {
+	UpdateSellInDate(r.item)
 
-	if isItemPastSellIn(item.SellIn) {
-		item.Quality = item.Quality - 2
+	if isItemPastSellIn(r.item.SellIn) {
+		r.item.Quality = r.item.Quality - 2
 		return
 	}
 
-	if item.Quality > MIN_ITEM_QUALITY {
-		item.Quality = item.Quality - 1
+	if r.item.Quality > MIN_ITEM_QUALITY {
+		r.item.Quality = r.item.Quality - 1
 	}
 }
 
-func (c ConjuredItem) UpdateItem(item *Item) {
-	UpdateSellInDate(item)
-	if item.Quality >= MIN_ITEM_CONJURED_QUALITY {
-		item.Quality = item.Quality - 2
+func (c *ConjuredItem) UpdateItem() {
+	UpdateSellInDate(c.item)
+	if c.item.Quality >= MIN_ITEM_CONJURED_QUALITY {
+		c.item.Quality = c.item.Quality - 2
 	}
 }
 
-func (ab AgedBrieItem) UpdateItem(item *Item) {
-	UpdateSellInDate(item)
-	if item.Quality < MAX_ITEM_QUALITY {
-		item.Quality = item.Quality + 1
+func (ab *AgedBrieItem) UpdateItem() {
+	UpdateSellInDate(ab.item)
+	if ab.item.Quality < MAX_ITEM_QUALITY {
+		ab.item.Quality = ab.item.Quality + 1
 	}
 }
 
-func (bs BackstageItem) UpdateItem(item *Item) {
-	UpdateSellInDate(item)
-	if item.SellIn < 0 {
-		item.Quality = 0
+func (bs *BackstageItem) UpdateItem() {
+	UpdateSellInDate(bs.item)
+	if bs.item.SellIn < 0 {
+		bs.item.Quality = 0
 		return
 	}
 
-	if isItemQualityValid(item.Quality) && isBackstageItemForTripleIncrease(item.SellIn) {
-		item.Quality = item.Quality + 3
+	if isItemQualityValid(bs.item.Quality) && isBackstageItemForTripleIncrease(bs.item.SellIn) {
+		bs.item.Quality = bs.item.Quality + 3
 		return
 	}
 
-	if isItemQualityValid(item.Quality) && isBackstageItemForDoubleIncrease(item.SellIn) {
-		item.Quality = item.Quality + 2
+	if isItemQualityValid(bs.item.Quality) && isBackstageItemForDoubleIncrease(bs.item.SellIn) {
+		bs.item.Quality = bs.item.Quality + 2
 		return
 	}
 
-	if isItemQualityValid(item.Quality) && isBackstageItemForRegularIncrease(item.SellIn) {
-		item.Quality = item.Quality + 1
+	if isItemQualityValid(bs.item.Quality) && isBackstageItemForRegularIncrease(bs.item.SellIn) {
+		bs.item.Quality = bs.item.Quality + 1
 		return
 	}
 }
