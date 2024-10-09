@@ -16,9 +16,9 @@ type RegularItem struct {
 	item *Item
 }
 
-func (s *SulfurasItem) UpdateItem() {}
+func (s SulfurasItem) UpdateItem() {}
 
-func (r *RegularItem) UpdateItem() {
+func (r RegularItem) UpdateItem() {
 	UpdateSellInDate(r.item)
 
 	if isItemPastSellIn(r.item.SellIn) {
@@ -31,21 +31,21 @@ func (r *RegularItem) UpdateItem() {
 	}
 }
 
-func (c *ConjuredItem) UpdateItem() {
+func (c ConjuredItem) UpdateItem() {
 	UpdateSellInDate(c.item)
 	if c.item.Quality >= MIN_ITEM_CONJURED_QUALITY {
 		c.item.Quality = c.item.Quality - 2
 	}
 }
 
-func (ab *AgedBrieItem) UpdateItem() {
+func (ab AgedBrieItem) UpdateItem() {
 	UpdateSellInDate(ab.item)
 	if ab.item.Quality < MAX_ITEM_QUALITY {
 		ab.item.Quality = ab.item.Quality + 1
 	}
 }
 
-func (bs *BackstageItem) UpdateItem() {
+func (bs BackstageItem) UpdateItem() {
 	UpdateSellInDate(bs.item)
 	if bs.item.SellIn < 0 {
 		bs.item.Quality = 0
